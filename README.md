@@ -1,4 +1,4 @@
 wml2html
 ========
 
-a xslt file for transform wml to html format
+with Nginx [HttpXsltModule](http://wiki.nginx.org/HttpXsltModule), you can transform wml to html.
