@@ -16,7 +16,7 @@
         </head>
         <body>
              <xsl:apply-templates select="card/p"/>
-             <script  src="http://res.3g.cn/js/wml.js?v=222" type="text/javascript"></script>
+             <script  src="/js/wml.js" type="text/javascript"></script>
         </body>
     </html>
 </xsl:template>
