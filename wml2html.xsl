@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:output method='html' version='1.0' encoding='UTF-8' indent='yes'/>
 
 <xsl:template match="/">
     <xsl:apply-templates/>
@@ -15,10 +16,10 @@
         </head>
         <body>
              <xsl:apply-templates select="card/p"/>
+             <script  src="http://res.3g.cn/js/wml.js?v=222" type="text/javascript"></script>
         </body>
     </html>
 </xsl:template>
-
 
 <xsl:template match="head">
         <xsl:copy-of select="meta"/>
@@ -64,22 +65,23 @@
 <xsl:template match="anchor">
      <xsl:variable name="anchoridx" select="position() "/>
     <form  style="display:inline">
-        <xsl:attribute name="method"><xsl:value-of select="go/@get"/></xsl:attribute>
+        <xsl:attribute name="method"><xsl:value-of select="go/@method"/></xsl:attribute>
         <xsl:attribute name="action"><xsl:value-of select="go/@href"/></xsl:attribute>
+        <xsl:attribute name="origaction"><xsl:value-of select="go/@href"/></xsl:attribute>
+        <xsl:attribute name="onsubmit">return nsWMLcheckForm(this);</xsl:attribute>
         <xsl:for-each select="go/postfield">
             <xsl:variable name="fieldidx" select="concat('field', $anchoridx, position() )"/>
-            <input type="hidden" name="{@name}"  id="{$fieldidx}" value="" />
+            <input type="hidden" name="{@name}"  id="{$fieldidx}" value="{@value}" origvalue="{@value}" />
         </xsl:for-each>
-        <xsl:variable name="js">
-            <xsl:for-each select="go/postfield">
-                <xsl:variable name="fieldidx" select="concat('field', $anchoridx, position() )"/>
-                <xsl:if test="@value != ''">if(document.getElementById('<xsl:value-of select="substring(@value, 3, string-length(@value)-3)"/>') !=null){document.getElementById('<xsl:value-of select="$fieldidx"/>').value=document.getElementById('<xsl:value-of select="substring(@value, 3, string-length(@value)-3)"/>').value;} </xsl:if>
-            </xsl:for-each>
-        </xsl:variable>
-        <input type="button" onclick="{$js}this.parentNode.submit();" value="{normalize-space(./text())}"  />
+        <xsl:apply-templates select="text()" />
     </form>
 </xsl:template>
 
+<xsl:template match="anchor/text()">
+    <xsl:if test="normalize-space(.) != ''" >
+         <input type="submit"  value="{normalize-space(.)}"  />
+    </xsl:if>
+</xsl:template>
 
 
 </xsl:stylesheet>
